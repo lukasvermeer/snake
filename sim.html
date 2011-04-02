@@ -1,0 +1,63 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<head>
+		<title>AISnake - the snake that plays with itself :) - by Lukas Vermeer</title>
+	</head>
+
+	<body leftMargin=0 topMargin=0 onLoad="Boot();Type();Loop();">
+	<table border=0 bordercolor=white cellPadding=0 cellSpacing=0 height="100%" width="100%">
+
+<script type="text/javascript">
+
+	  var _gaq = _gaq || [];
+	  _gaq.push(['_setAccount', 'UA-17073322-1']);
+	  _gaq.push(['_setDomainName', 'none']);
+	  _gaq.push(['_setAllowLinker', true]);
+	  _gaq.push(['_trackPageview']);
+
+	  (function() {
+	    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+	    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+	    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+	  })();
+
+</script>
+
+<script language="JavaScript" type="text/javascript">
+<!--
+updateMe=false;
+
+// default settings for the simulation;
+var s = 10;
+var sC = 4;
+bite_x = 0;
+bite_y = 0;
+
+// noFX (used only for debugging)
+noFX = false;
+//noFX = true;
+
+// verbose mode (used only for debugging)
+verbose = false;
+//verbose = true;
+timestamp = new Date();
+
+function verboseMode(t) {
+ newtime = new Date();
+ time = ((newtime.getTime() - timestamp.getTime())/1000);
+ alert(t + " (time: " + time + " sec.)");
+ timestamp = new Date();
+}
+
+if (verbose) {verboseMode("VERBOSE MODE ENABLED");}
+
+// next, two script files will be imported. the first will be the type definition, this file keeps track of all the type specific funtions needed for the anitmation and all other scripts that will have to be imported in order to make it work. the second contains all the functions that all types of simulations need includion the actual importation of the scripts needed.
+-->
+</script>
+
+<!-- external scripts used (the 'type script' will import more, if needed for the display type selected); -->
+<script language="JavaScript" type="text/javascript" src="type_web.js"></script>
+<script language="JavaScript" type="text/javascript" src="common.js"></script>
+
+</body>
+</html>

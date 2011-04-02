@@ -1,0 +1,483 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<head>
+		<script type="text/javascript">
+
+		  var _gaq = _gaq || [];
+		  _gaq.push(['_setAccount', 'UA-17073322-1']);
+		  _gaq.push(['_setDomainName', 'none']);
+		  _gaq.push(['_setAllowLinker', true]);
+		  _gaq.push(['_trackPageview']);
+
+		  (function() {
+		    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		  })();
+
+		</script>
+
+		<script language="JavaScript">
+		<!--
+			var s = 30;
+			var sC = 20;
+			bite_x = 0;
+			bite_y = 0;
+
+			runtime = 0;
+			wait = 10;
+		
+			function Rush()
+			{
+				runtime++;
+				for (z=0;z<sC;z++)	{
+					if (alive[z] == true) 
+					{
+						killTail(z); Run(z, genePool[z]);}
+					if (alive[z] == true) { drawSnake(z); }
+				}
+				if (runtime >= 200)	{ feedSnake(); }
+				ShowBite();
+			}
+
+			function Boot()
+			{
+				InitTable();
+				startTail = 0;
+				maxtail = 500;
+				survivalRate = 250;
+				foodQuality = 500;
+				updateStats = false;
+				tail = new Array();
+				last_direction = new Array();
+				location_x = new Array();
+				location_y = new Array();
+				genePool = new Array();
+				historyN = new Array();
+				historyL = new Array();
+				historyC = 0;
+				alive = new Array();
+				breedingProgram = new Array();
+				lastBite = new Array();
+				colorSnakes();
+				for (z=0;z<sC;z++)
+				{ 
+					Init(z, randomGenes("God", "Top"));
+				}
+				feedSnake();
+			}
+
+			function Init(n,genes)
+			{
+				location_x[n*maxtail] = Math.ceil(s * Math.random()) - 1; location_y[n*maxtail] = Math.ceil(s * Math.random()) - 1;
+				if (wallHere(location_x[n*maxtail], location_y[n*maxtail])) {Init(n, genes);}
+				else {InitBasic(n, genes);}
+			}
+
+			function InitXY(n,x,y,genes)
+			{
+				location_x[n*maxtail] = x; location_y[n*maxtail] = y;
+				InitBasic(n,genes);
+			}
+
+			function InitBasic(n,genes) {
+				last_direction[n] = 1; tail[n] = startTail; lastBite[n] = 0;
+				for (x=1;x<=tail[n];x++)
+				{  location_x[x+(n*maxtail)] = location_x[(n*maxtail)];
+					location_y[x+(n*maxtail)] = location_y[(n*maxtail)]; }
+				colorSnake(n);
+				genePool[n] = genes;
+				addtoHist(n);
+				alive[n] = true; 
+			}
+
+			function InitTable() {
+				document.write('<table border=0 bordercolor=white cellPadding=0 cellSpacing=0 height="100%" width="100%">');
+				for (y=0;y<s;y++) {
+					document.write('<tr height="'+100/s+'%" border="0">');
+					for (x=0;x<s;x++) {
+						document.write('<td ID="feed'+((y*s)+x+1)+'" width="'+100/s+'%">&nbsp;</td>');
+					}
+					document.write('</tr>');
+				} 
+				document.write('</table>');
+			}
+
+			function feedSnake()
+			{
+				HideBite();
+				bite_x = Math.ceil(s  * Math.random()) - 1; bite_y = Math.ceil(s * Math.random()) - 1;
+				while (snakeHere(bite_x, bite_y) || wallHere(bite_x, bite_y)) {bite_x = Math.ceil(s  * Math.random()) - 1; bite_y = Math.ceil(s * Math.random()) - 1;}
+				runtime = 0;
+			}
+
+			function feedSnakeXY(x,y)
+			{
+			 HideBite();
+			 bite_x = x; bite_y = y;
+			 runtime = 0;
+			}
+
+			var blockX = new Array();
+			var blockY = new Array();
+			var blockH = new Array();
+			var blockW = new Array();
+			var blockC = new Array();
+
+			function makeBlock(n,x,y,h,w,c) {
+			 blockX[n] = x;
+			 blockY[n] = y;
+			 blockH[n] = h;
+			 blockW[n] = w;
+			 blockC[n] = c;
+			}
+
+			function wallHere(x,y)
+			{
+			 if (x < 0)	{return true;}
+			 if (x > s-1)	{return true;}
+			 if (y < 0)	{return true;}
+			 if (y > s-1)	{return true;}
+			 return false;
+			}
+
+			function snakeHere(x,y)
+			{
+			 for (c=0; c<sC; c++)
+			 {
+				for (i=c*maxtail;i<=tail[c]+(c*maxtail);i++) {
+					if (location_x[i] == x && location_y[i] == y) {return true;}
+				 }
+			 }
+
+			 return false;
+			}
+
+			function addSnakeXY(x,y) {
+			 sC++;
+			 colorSnake(sC-1);
+			 InitXY(sC-1,x,y,randomGenes("User", "Top"));
+			 if (updateStats==true) {updateStatsWin();}
+			}
+						
+			function colorSnakes() 
+			{
+				snakeColor = new Array();
+				headColor = new Array();
+				Ca = new Array(); Ca[0] = "FF"; Ca[1] = "FF"; Ca[2] = "DD"; Ca[3] = "BB"; Ca[4] = "99"; Ca[5] = "77"; Ca[6] = "55"; Ca[7] = "33"; Ca[8] = "11"; Ca[9] = "00"; Ca[10] = "00";
+				biteColor = '#50ff50';						// bite color 'visible'
+			}
+
+			function colorSnake(i) {
+			   r = Math.ceil(8 * Math.random()); g = Math.ceil(8 * Math.random()); b = Math.ceil(8 * Math.random());
+			   snakeColor[i] = '#'+Ca[r]+Ca[g]+Ca[b];			// tail color
+			   headColor[i] = '#'+Ca[r+2]+Ca[g+2]+Ca[b+2]; }		// head of snake color 
+
+			function ShowRank() 
+			{
+			 tail_by_rank = new Array(); color_by_rank = new Array();
+
+			 for (i=0;i<sC;i++) 
+			 {	tail_by_rank[i] = tail[i];
+				color_by_rank[i] = snakeColor[i]; }
+
+			 // bubblesort, I think...
+			 for (i=sC-1;i>=0;i--) 
+			 { 	for (q=sC-i-1;q>=0;q--) 
+				{ 	if (tail_by_rank[q] < tail_by_rank[q+1]) 
+					{	t = tail_by_rank[q];
+						tail_by_rank[q] = tail_by_rank[q+1];
+						tail_by_rank[q+1] = t;
+						t = color_by_rank[q];
+						color_by_rank[q] = color_by_rank[q+1];
+						color_by_rank[q+1] = t;	}}}
+
+			 for (i=0;i<=2;i++)
+			 {	DrawRank(i+1, color_by_rank[i]); }
+			}
+
+			function killTail(z) { DrawBlip(location_x[tail[z]+(z*maxtail)], location_y[tail[z]+(z*maxtail)], 'white'); }
+
+			function drawSnake(z)
+			{
+			 if (tail[z]>=1) {DrawBlip(location_x[1+(z*maxtail)], location_y[1+(z*maxtail)], snakeColor[z])};
+			 DrawBlip(location_x[(z*maxtail)], location_y[(z*maxtail)], headColor[z]);
+			}
+
+			function ShowBite() { DrawBlip(bite_x, bite_y, biteColor); }
+
+			function HideBite() { DrawBlip(bite_x, bite_y, "white"); }
+
+			function DrawBlip(x,y,c) { 
+				if (!wallHere(x,y)) {
+					eval("document.all.feed"+((y*s)+x+1)+".bgColor = c");
+				}
+			}
+
+			function Run(n, genes) // run snake number 'n'
+			{
+			 lastBite[n]++;
+
+			 // [0] IDENTIFY GENES
+			 //
+			 //
+			 // AUTHORS NOTE:
+			 // this feature was added later, after a tip from my gf. She thought it would be a good idea to give the snakes the
+			 // ability to evolve.
+
+			 basic_need	= genes[1];
+			 wall_need	= genes[2];
+			 snake_need	= genes[3];
+			 bitex_need	= genes[4];
+			 bitex2_need	= genes[5];
+			 bitey_need	= genes[6];
+			 bitey2_need	= genes[7];
+			 last_need	= genes[8];
+
+			 // [1] CONSIDER ALL OPTIONS OPEN TO SNAKE
+			 //
+			 //
+			 // AUTHORS NOTE:
+			 // to decide in what direction the snake will make it's move, it will give each possible direction a score based on a few 
+			 // important positives and negatives. the snake will move in the direction with the highest score (above zero that is).
+
+			 var y_plus_need = basic_need; // down
+			 var y_minu_need = basic_need; // up
+			 var x_plus_need = basic_need; // right
+			 var x_minu_need = basic_need; // left
+
+			 var sx = location_x[n*maxtail];
+			 var sy = location_y[n*maxtail];
+
+			 // NEGATIVES (reasons not to go in a direction):
+
+			 // WALL [-99]
+			 // hitting a wall will kill the snake, and we don't want that to happen, now do we :)
+			 if (wallHere(sx - 1,sy))	{x_plus_need+=wall_need;}
+			 if (wallHere(sx + 1,sy))	{x_minu_need+=wall_need;}
+			 if (wallHere(sx,sy - 1))	{y_plus_need+=wall_need;}
+			 if (wallHere(sx,sy + 1))	{y_minu_need+=wall_need;}
+
+			 // OTHER SNAKE [-99]
+			 // same effect as hitting a wall, but somewhat more difficult to calculate.
+			 if (snakeHere(sx - 1, sy)) { x_plus_need+=snake_need; }
+			 if (snakeHere(sx + 1, sy)) { x_minu_need+=snake_need; }
+			 if (snakeHere(sx, sy - 1)) { y_plus_need+=snake_need; }
+			 if (snakeHere(sx, sy + 1)) { y_minu_need+=snake_need; }
+
+			 // POSITIVES (reasons to go somewhere):
+
+			 // FOOD [+2] (also [+1] for directions left and right of direct route to food)
+			 // go towards the food, but not at all costs. a somewhat strange way if awarding points, but better than just awarding points 
+			 // for the direct route, I have no clue as to why :)
+			 if (sx > bite_x ) {x_plus_need+=bitex_need;	y_plus_need+=bitex2_need;	y_minu_need+=bitex2_need;} 
+			 if (sx < bite_x ) {x_minu_need+=bitex_need;	y_plus_need+=bitex2_need;	y_minu_need+=bitex2_need;} 
+			 if (sy > bite_y ) {y_plus_need+=bitey_need;	x_plus_need+=bitey2_need;	x_minu_need+=bitey2_need;} 
+			 if (sy < bite_y ) {y_minu_need+=bitey_need;	x_plus_need+=bitey2_need;	x_minu_need+=bitey2_need;} 
+
+			 // LAST DIRECTION [+.5]
+			 // somehow this increases the life span of the snakes. if you figure out why, please tell me, because I really don't know...
+			 if (last_direction[n] == 1) {x_plus_need+=last_need;} 
+			 if (last_direction[n] == 2) {x_minu_need+=last_need;} 
+			 if (last_direction[n] == 3) {y_plus_need+=last_need;} 
+			 if (last_direction[n] == 4) {y_minu_need+=last_need;} 
+
+			 // [2] SELECT BEST OPTION
+			 //
+			 //
+			 // AUTHORS NOTE:
+			 // because I wanted to have the snakes run indefinitely ( for my desktop :) ) I made them so that they do not die, ever.
+			 // if a snake has no options left (he/she is trapped) it will decrease it's tail by one blip. this way there will always
+			 // be snakes and the simulation will not have to be restarted every now and then.
+
+			 best_option = Math.max(Math.max(x_plus_need, x_minu_need), Math.max(y_plus_need, y_minu_need));
+			 if (best_option <= 0) { killSnake(n, "gave up"); }
+			 else if (lastBite[n] >= survivalRate) { killSnake(n, "hunger"); }
+			 else {
+				if (best_option == x_plus_need) {m = 1;} // left
+				if (best_option == x_minu_need) {m = 2;} // right
+				if (best_option == y_plus_need) {m = 3;} // up
+				if (best_option == y_minu_need) {m = 4;} // down
+
+			 // [3] EXECUTE DECISION
+			 //
+			 //
+			 // AUTHORS NOTE:
+			 // the rest is boring execution of the decision, you might want to ignore this. then again, you might be a masochist
+
+				for (x=tail[n];x>=1;x--) 
+				{
+					location_x[x+(n*maxtail)] = location_x[x - 1 + (n*maxtail)];			
+					location_y[x+(n*maxtail)] = location_y[x - 1 + (n*maxtail)];
+				}
+
+				// snake ate the bite: 
+				if (location_x[n*maxtail]==bite_x && location_y[n*maxtail]==bite_y) {			
+					feedSnake();									
+					lastBite[n] = lastBite[n] - foodQuality;
+					if (tail[n]<=maxtail) {
+						tail[n]++;
+						location_x[tail[n]+(n*maxtail)] = location_x[tail[n]-1+(n*maxtail)];
+						location_y[tail[n]+(n*maxtail)] = location_y[tail[n]-1+(n*maxtail)];
+					}
+				}
+
+				if (m==1) {location_x[n*maxtail]--;}
+				if (m==2) {location_x[n*maxtail]++;}
+				if (m==3) {location_y[n*maxtail]--;}
+				if (m==4) {location_y[n*maxtail]++;}
+
+				last_direction[n] = m;
+				if (wallHere(location_x[n*maxtail],location_y[n*maxtail])) { killSnake(n, "collision|"+location_x[n*maxtail]+","+location_y[n*maxtail]); }
+			 }
+			}
+
+			function killSnake(n, why) {
+			 alive[n] = false;
+			 for (i=n*maxtail;i<=tail[n]+(n*maxtail);i++) {
+				DrawBlip(location_x[i], location_y[i], 'white');
+				location_x[i] = null;
+				location_y[i] = null; }
+
+			 genes = genePool[n]; hist = new Array(); for (var i=0; genes[i] != null; i++) { hist[i] = genes[i]; }
+			 hist[i] = tail[n]; hist[i+1] = why; historyL[historyN[n]] = hist; tail[n] = null;
+
+			 enterBreedProg(historyN[n]);
+			}
+
+			function enterBreedProg(p) {
+			 for (var i=0;breedingProgram[i]!=null;i++) {}
+			 if (i<3) {breedingProgram[i] = p;}
+			 else {
+				breedingProgram[3] = p;
+				compare_and_breed(breedingProgram);
+				for (i=0;i<=3;i++) {breedingProgram[i]=null;}
+			 }
+			 
+			}
+
+			function compare_and_breed(p) {
+			 score = new Array;
+			 genes = new Array;
+			 var best = -1;
+			 var bestman = null;
+
+			 for (z=0;p[z]!=null;z++) {
+				score[z]=getScore(p[z]);
+				genes[z]=cloneGenes(p[z]);
+				if (score[z]>=best) {
+					best = score[z];
+					bestman = z;
+				}
+			 }
+
+			 if (best == 0) {
+				AddSnake(randomGenes("God")); 
+				AddSnake(randomGenes("God")); 
+				AddSnake(randomGenes("God")); 
+				AddSnake(randomGenes("God")); 
+			 }
+			 else { 
+				AddSnake(genes[bestman]);
+				AddSnake(mutateGenes(p[bestman]));
+				AddSnake(mutateGenes(p[bestman]));
+				AddSnake(mutateGenes(p[bestman]));
+			 }
+			}
+
+			function mutateGenes(p) {
+			 oldgenes = historyL[p]
+			 newgenes = new Array();
+			 newgenes[0] = parseInt(oldgenes[0])+1;
+			 newgenes[3] = oldgenes[3];
+			 newgenes[9] = p;
+			 newgenes[10] = "mutation";
+
+			 for (i=1; i<=2; i++) {
+			  if (mutationInhibitor()) {newgenes[i] = mutateGene(oldgenes[i]);}
+			  else if (unstableMutationInhibitor()) {newgenes[i] = randomGene();}
+			  else {newgenes[i] = oldgenes[i];}
+			 }
+			 for (i=4; i<=8; i++) {
+			  if (mutationInhibitor()) {newgenes[i] = mutateGene(oldgenes[i]);}
+			  else if (unstableMutationInhibitor()) {newgenes[i] = randomGene();}
+			  else {newgenes[i] = oldgenes[i];}
+			 }
+
+			 return newgenes;
+			}
+
+			function mutationInhibitor() {		return (Math.round(Math.random()*8) == 1); }
+			function unstableMutationInhibitor() {	return (Math.round(Math.random()*8) == 1); }
+			function mutateGene(x) {		return x + ((Math.round(Math.random()*10)/2) - 5); }
+			function randomGene() {			return (Math.round(Math.random()*200)/2-50); }
+			function getScore(p) {
+			 n = historyL[p];
+			 return n[11];
+			}
+			function AddSnake(g) { 			for (var i=0;alive[i] == true;i++) {} alive[i] = true;  Init(i, g); }
+
+			function randomGenes(p) {
+			 genes = new Array();
+			 genes = defaultGenes(p);
+			 genes[1] = randomGene();
+			 genes[2] = randomGene();
+			 genes[4] = randomGene();
+			 genes[5] = randomGene();
+			 genes[6] = randomGene();
+			 genes[7] = randomGene();
+			 genes[8] = randomGene();
+			 genes[10] = "random";
+			 return genes;
+			}
+
+			function createGenes(p) {
+			 genes = new Array();
+			 genes = defaultGenes(p);
+			 genes[1] = mutateGene(genes[1]);
+			 genes[2] = mutateGene(genes[2]);
+			 genes[4] = mutateGene(genes[4]);
+			 genes[5] = mutateGene(genes[5]);
+			 genes[6] = mutateGene(genes[6]);
+			 genes[7] = mutateGene(genes[7]);
+			 genes[8] = mutateGene(genes[8]);
+			 genes[10] = "mutation of default";
+			 return genes;
+			}
+
+			function cloneGenes(p) { oldgenes = historyL[p]; newgenes = new Array(); for (i=0; i<=8; i++) { newgenes[i] = oldgenes[i]; } newgenes[9] = p; newgenes[10] = "clone";  newgenes[0] = parseInt(newgenes[0])+1; return newgenes; }
+
+			function defaultGenes(p) { genes = new Array(); genes[0] = 0; genes[1] = 1; genes[2] = -999; genes[3] = -999; genes[4] = 2; genes[5] = 1; genes[6] = 2; genes[7] = 1; genes[8] = 0.5; genes[9] = p; genes[10] = "default"; return genes; }
+
+			function addtoHist(n) {
+			 historyN[n] = historyC;
+			 historyL[historyN[n]] = genePool[n];
+			 historyC++;
+			}
+
+			function Darwin(g) {
+			 name = "unknown";
+			 if (g[2] > 0) { name = "suicidal";}
+			 if (g[1] < 0) { name = "pessimist";}
+			 if (g[1] < 0 && g[2] < 0 && g[4] < 0 && g[5] < 0 && g[6] < 0 && g[7] < 0 && g[8] < 0) { name = "quitter";}
+
+			 name+=" ("+g[1]+"|"+g[2]+"|"+g[4]+"|"+g[5]+"|"+g[6]+"|"+g[7]+"|"+g[8]+")"
+
+			 return name;
+			}
+			
+			function Loop() {
+				for (i=0;i<=1;i++) {
+					Rush();
+				}
+				var timerID = setTimeout('Loop()',wait);
+			}
+			
+			Boot();
+			Loop();
+			-->
+		</script>
+	</head>
+	<body leftMargin=0 topMargin=0>
+	</body>
+</html>
