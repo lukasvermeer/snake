@@ -1,20 +1,14 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
 	<head>
-		<script type="text/javascript">
+		<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+			(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+			m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
-		  var _gaq = _gaq || [];
-		  _gaq.push(['_setAccount', 'UA-17073322-1']);
-		  _gaq.push(['_setDomainName', 'none']);
-		  _gaq.push(['_setAllowLinker', true]);
-		  _gaq.push(['_trackPageview']);
-
-		  (function() {
-		    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-		    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-		    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-		  })();
-
+		ga('create', 'UA-105998856-2', 'auto');
+		ga('send', 'pageview');
 		</script>
 
 		<script language="JavaScript">
@@ -26,12 +20,12 @@
 
 			runtime = 0;
 			wait = 10;
-		
+
 			function Rush()
 			{
 				runtime++;
 				for (z=0;z<sC;z++)	{
-					if (alive[z] == true) 
+					if (alive[z] == true)
 					{
 						killTail(z); Run(z, genePool[z]);}
 					if (alive[z] == true) { drawSnake(z); }
@@ -61,7 +55,7 @@
 				lastBite = new Array();
 				colorSnakes();
 				for (z=0;z<sC;z++)
-				{ 
+				{
 					Init(z, randomGenes("God", "Top"));
 				}
 				feedSnake();
@@ -88,7 +82,7 @@
 				colorSnake(n);
 				genePool[n] = genes;
 				addtoHist(n);
-				alive[n] = true; 
+				alive[n] = true;
 			}
 
 			function InitTable() {
@@ -99,7 +93,7 @@
 						document.write('<td ID="feed'+((y*s)+x+1)+'" width="'+100/s+'%">&nbsp;</td>');
 					}
 					document.write('</tr>');
-				} 
+				}
 				document.write('</table>');
 			}
 
@@ -159,8 +153,8 @@
 			 InitXY(sC-1,x,y,randomGenes("User", "Top"));
 			 if (updateStats==true) {updateStatsWin();}
 			}
-						
-			function colorSnakes() 
+
+			function colorSnakes()
 			{
 				snakeColor = new Array();
 				headColor = new Array();
@@ -171,20 +165,20 @@
 			function colorSnake(i) {
 			   r = Math.ceil(8 * Math.random()); g = Math.ceil(8 * Math.random()); b = Math.ceil(8 * Math.random());
 			   snakeColor[i] = '#'+Ca[r]+Ca[g]+Ca[b];			// tail color
-			   headColor[i] = '#'+Ca[r+2]+Ca[g+2]+Ca[b+2]; }		// head of snake color 
+			   headColor[i] = '#'+Ca[r+2]+Ca[g+2]+Ca[b+2]; }		// head of snake color
 
-			function ShowRank() 
+			function ShowRank()
 			{
 			 tail_by_rank = new Array(); color_by_rank = new Array();
 
-			 for (i=0;i<sC;i++) 
+			 for (i=0;i<sC;i++)
 			 {	tail_by_rank[i] = tail[i];
 				color_by_rank[i] = snakeColor[i]; }
 
 			 // bubblesort, I think...
-			 for (i=sC-1;i>=0;i--) 
-			 { 	for (q=sC-i-1;q>=0;q--) 
-				{ 	if (tail_by_rank[q] < tail_by_rank[q+1]) 
+			 for (i=sC-1;i>=0;i--)
+			 { 	for (q=sC-i-1;q>=0;q--)
+				{ 	if (tail_by_rank[q] < tail_by_rank[q+1])
 					{	t = tail_by_rank[q];
 						tail_by_rank[q] = tail_by_rank[q+1];
 						tail_by_rank[q+1] = t;
@@ -208,7 +202,7 @@
 
 			function HideBite() { DrawBlip(bite_x, bite_y, "white"); }
 
-			function DrawBlip(x,y,c) { 
+			function DrawBlip(x,y,c) {
 				if (!wallHere(x,y)) {
 					eval("document.all.feed"+((y*s)+x+1)+".bgColor = c");
 				}
@@ -238,7 +232,7 @@
 			 //
 			 //
 			 // AUTHORS NOTE:
-			 // to decide in what direction the snake will make it's move, it will give each possible direction a score based on a few 
+			 // to decide in what direction the snake will make it's move, it will give each possible direction a score based on a few
 			 // important positives and negatives. the snake will move in the direction with the highest score (above zero that is).
 
 			 var y_plus_need = basic_need; // down
@@ -268,19 +262,19 @@
 			 // POSITIVES (reasons to go somewhere):
 
 			 // FOOD [+2] (also [+1] for directions left and right of direct route to food)
-			 // go towards the food, but not at all costs. a somewhat strange way if awarding points, but better than just awarding points 
+			 // go towards the food, but not at all costs. a somewhat strange way if awarding points, but better than just awarding points
 			 // for the direct route, I have no clue as to why :)
-			 if (sx > bite_x ) {x_plus_need+=bitex_need;	y_plus_need+=bitex2_need;	y_minu_need+=bitex2_need;} 
-			 if (sx < bite_x ) {x_minu_need+=bitex_need;	y_plus_need+=bitex2_need;	y_minu_need+=bitex2_need;} 
-			 if (sy > bite_y ) {y_plus_need+=bitey_need;	x_plus_need+=bitey2_need;	x_minu_need+=bitey2_need;} 
-			 if (sy < bite_y ) {y_minu_need+=bitey_need;	x_plus_need+=bitey2_need;	x_minu_need+=bitey2_need;} 
+			 if (sx > bite_x ) {x_plus_need+=bitex_need;	y_plus_need+=bitex2_need;	y_minu_need+=bitex2_need;}
+			 if (sx < bite_x ) {x_minu_need+=bitex_need;	y_plus_need+=bitex2_need;	y_minu_need+=bitex2_need;}
+			 if (sy > bite_y ) {y_plus_need+=bitey_need;	x_plus_need+=bitey2_need;	x_minu_need+=bitey2_need;}
+			 if (sy < bite_y ) {y_minu_need+=bitey_need;	x_plus_need+=bitey2_need;	x_minu_need+=bitey2_need;}
 
 			 // LAST DIRECTION [+.5]
 			 // somehow this increases the life span of the snakes. if you figure out why, please tell me, because I really don't know...
-			 if (last_direction[n] == 1) {x_plus_need+=last_need;} 
-			 if (last_direction[n] == 2) {x_minu_need+=last_need;} 
-			 if (last_direction[n] == 3) {y_plus_need+=last_need;} 
-			 if (last_direction[n] == 4) {y_minu_need+=last_need;} 
+			 if (last_direction[n] == 1) {x_plus_need+=last_need;}
+			 if (last_direction[n] == 2) {x_minu_need+=last_need;}
+			 if (last_direction[n] == 3) {y_plus_need+=last_need;}
+			 if (last_direction[n] == 4) {y_minu_need+=last_need;}
 
 			 // [2] SELECT BEST OPTION
 			 //
@@ -305,15 +299,15 @@
 			 // AUTHORS NOTE:
 			 // the rest is boring execution of the decision, you might want to ignore this. then again, you might be a masochist
 
-				for (x=tail[n];x>=1;x--) 
+				for (x=tail[n];x>=1;x--)
 				{
-					location_x[x+(n*maxtail)] = location_x[x - 1 + (n*maxtail)];			
+					location_x[x+(n*maxtail)] = location_x[x - 1 + (n*maxtail)];
 					location_y[x+(n*maxtail)] = location_y[x - 1 + (n*maxtail)];
 				}
 
-				// snake ate the bite: 
-				if (location_x[n*maxtail]==bite_x && location_y[n*maxtail]==bite_y) {			
-					feedSnake();									
+				// snake ate the bite:
+				if (location_x[n*maxtail]==bite_x && location_y[n*maxtail]==bite_y) {
+					feedSnake();
 					lastBite[n] = lastBite[n] - foodQuality;
 					if (tail[n]<=maxtail) {
 						tail[n]++;
@@ -353,7 +347,7 @@
 				compare_and_breed(breedingProgram);
 				for (i=0;i<=3;i++) {breedingProgram[i]=null;}
 			 }
-			 
+
 			}
 
 			function compare_and_breed(p) {
@@ -372,12 +366,12 @@
 			 }
 
 			 if (best == 0) {
-				AddSnake(randomGenes("God")); 
-				AddSnake(randomGenes("God")); 
-				AddSnake(randomGenes("God")); 
-				AddSnake(randomGenes("God")); 
+				AddSnake(randomGenes("God"));
+				AddSnake(randomGenes("God"));
+				AddSnake(randomGenes("God"));
+				AddSnake(randomGenes("God"));
 			 }
-			 else { 
+			 else {
 				AddSnake(genes[bestman]);
 				AddSnake(mutateGenes(p[bestman]));
 				AddSnake(mutateGenes(p[bestman]));
@@ -465,14 +459,14 @@
 
 			 return name;
 			}
-			
+
 			function Loop() {
 				for (i=0;i<=1;i++) {
 					Rush();
 				}
 				var timerID = setTimeout('Loop()',wait);
 			}
-			
+
 			Boot();
 			Loop();
 			-->
